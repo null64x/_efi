@@ -253,9 +253,9 @@ ExitBootServicesEvent(
 	Runtime = TRUE;
 
 	// Print some text so we know it works (300iq)
-	ST->ConOut->SetAttribute(ST->ConOut, EFI_WHITE | EFI_BACKGROUND_RED);
+	ST->ConOut->SetAttribute(ST->ConOut, EFI_YELLOW | EFI_BACKGROUND_PURPLE);
 	ST->ConOut->ClearScreen(ST->ConOut);
-	Print(L"Loaded successfully, remove USB. Booting to Windows <3 \n");
+	Print(L"Jupiter loaded successfully, remove USB. Booting to Windows :3 \n");
 }
 
 // Replaces service table pointer with desired one
@@ -393,7 +393,8 @@ efi_main(IN EFI_HANDLE ImageHandle, IN EFI_SYSTEM_TABLE *SystemTable)
 
 	// Print confirmation text
 	Print(L"\n");
-	Print(L"Loaded successfully. You can now boot to Windows :3\n");
-	Print(L"If you don't see a confirmation message while booting; Disable Secure Boot!.\n");
+	Print(L"Jupiter loaded successfully. You are able now boot to Windows :3\n");
+	Print(L"If you don't see a confirmation message while booting; Disable Secure Boot and retry!\n");
+	Print(L"Type now: exit, and press enter to proceed.\n");
 	return EFI_SUCCESS;
 }
