@@ -253,7 +253,7 @@ ExitBootServicesEvent(
 	Runtime = TRUE;
 
 	// Print some text so we know it works (300iq)
-	ST->ConOut->SetAttribute(ST->ConOut, EFI_YELLOW | EFI_BACKGROUND_PURPLE);
+	ST->ConOut->SetAttribute(ST->ConOut, EFI_YELLOW | EFI_BACKGROUND_GREEN);
 	ST->ConOut->ClearScreen(ST->ConOut);
 	Print(L"Jupiter loaded successfully, remove USB. Booting to Windows :3 \n");
 }
