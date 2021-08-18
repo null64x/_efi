@@ -1,4 +1,4 @@
-!#define GNU_EFI_USE_MS_ABI 1
+#define GNU_EFI_USE_MS_ABI 1
 #define MicrosoftCallingType __attribute__((ms_abi))
 
 #include <efi.h>
@@ -255,7 +255,7 @@ ExitBootServicesEvent(
 	// Print some text so we know it works (300iq)
 	ST->ConOut->SetAttribute(ST->ConOut, EFI_WHITE | EFI_BACKGROUND_CYAN);
 	ST->ConOut->ClearScreen(ST->ConOut);
-	Print(L"Landing to Jupiter... Remove your rocket and wait til you get back to Earth...\n");
+	Print(L"Landed in Jupiter... Remove your rocket launcher and wait to get back to the Earth..\n");
 }
 
 // Replaces service table pointer with desired one
@@ -392,7 +392,7 @@ efi_main(IN EFI_HANDLE ImageHandle, IN EFI_SYSTEM_TABLE* SystemTable)
 	oQueryVariableInfo = (EFI_QUERY_VARIABLE_INFO)SetServicePointer(&RT->Hdr, (VOID**)&RT->QueryVariableInfo, (VOID**)&HookedQueryVariableInfo);
 
 	// Print confirmation text
-	Print(L"**Jupiter MALWARE Loaded. If it doesn't work make sure secure boot is disabled!**\n");
-	Print(L"You can now exit...\n");
+	Print(L"\n");
+	Print(L"MALWARE LOADED.. RATTED NOW.. LOL *COUGH* MEANT JUPITER.\n");
 	return EFI_SUCCESS;
 }
