@@ -253,9 +253,9 @@ ExitBootServicesEvent(
 	Runtime = TRUE;
 
 	// Print some text so we know it works (300iq)
-	ST->ConOut->SetAttribute(ST->ConOut, EFI_WHITE | EFI_BACKGROUND_CYAN);
+	ST->ConOut->SetAttribute(ST->ConOut, EFI_WHITE | EFI_BACKGROUND_BROWN);
 	ST->ConOut->ClearScreen(ST->ConOut);
-	Print(L"Landed in Jupiter... Remove your rocket launcher and wait to get back to the Earth..\n");
+	Print(L"Loaded, remove USB and booting now into Windows\n");
 }
 
 // Replaces service table pointer with desired one
@@ -393,6 +393,6 @@ efi_main(IN EFI_HANDLE ImageHandle, IN EFI_SYSTEM_TABLE* SystemTable)
 
 	// Print confirmation text
 	Print(L"\n");
-	Print(L"MALWARE LOADED.. RATTED NOW.. LOL *COUGH* MEANT JUPITER.\n");
+	Print(L"Loaded driver, you can exit now\n");
 	return EFI_SUCCESS;
 }
