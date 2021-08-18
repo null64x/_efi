@@ -36,7 +36,7 @@ typedef int (MicrosoftCallingType *PsLookupProcessByProcessId)(
 typedef void* (MicrosoftCallingType *PsGetProcessSectionBaseAddress)(
 	void* PEProcess
 );
-typedef int (MicrosoftCallingType *MmCopyVirtualMemory)(
+typedef int (MicrosoftCallingType *MmCopyvirtMemory)(
 	void* SourceProcess,
 	void* SourceAddress,
 	void* TargetProcess,
@@ -47,29 +47,29 @@ typedef int (MicrosoftCallingType *MmCopyVirtualMemory)(
 );
 
 // Our protocol GUID (should be different for every driver)
-static const EFI_GUID ProtocolGuid
+static const EFI_GUID protocolg
 	= { 0x2f84893e, 0xfd5e, 0x2038, {0x8d, 0x9e, 0x20, 0xa7, 0xaf, 0x9c, 0x32, 0xf1} };
 
-// VirtualAddressMap GUID (gEfiEventVirtualAddressChangeGuid)
-static const EFI_GUID VirtualGuid
+// virtAddressMap GUID (gEfiEventvirtAddressChangeGuid)
+static const EFI_GUID virtg
 	= { 0x13FA7698, 0xC831, 0x49C7, { 0x87, 0xEA, 0x8F, 0x43, 0xFC, 0xC2, 0x51, 0x96 }}; //we will remove later shouldn't be important
 
 // ExitBootServices GUID (gEfiEventExitBootServicesGuid)
-static const EFI_GUID ExitGuid
+static const EFI_GUID exitg
 	= { 0x27ABF055, 0xB1B8, 0x4C26, { 0x80, 0x48, 0x74, 0x8F, 0x37, 0xBA, 0xA2, 0xDF }}; //we will remove later shouldn't be important
 
 // Pointers to original functions
-static EFI_SET_VARIABLE oSetVariable = NULL;
+static EFI_SET_VARIABLE setvaro = NULL;
 
 // Global declarations
-static EFI_EVENT NotifyEvent = NULL;
-static EFI_EVENT ExitEvent = NULL;
-static BOOLEAN Virtual = FALSE;
-static BOOLEAN Runtime = FALSE;
+static EFI_EVENT notify = NULL;
+static EFI_EVENT exite = NULL;
+static BOOLEAN virt = FALSE;
+static BOOLEAN rt = FALSE;
 
 static PsLookupProcessByProcessId GetProcessByPid = (PsLookupProcessByProcessId)0;
 static PsGetProcessSectionBaseAddress GetBaseAddress = (PsGetProcessSectionBaseAddress)0;
-static MmCopyVirtualMemory MCopyVirtualMemory = (MmCopyVirtualMemory)0;
+static MmCopyvirtMemory MCopyvirtMemory = (MmCopyvirtMemory)0;
 
 // Function that actually performs the r/w
 EFI_STATUS
@@ -115,7 +115,7 @@ RunCommand(MemoryCommand* cmd)
 			}
 				
 			
-			*(ptr64*)resultAddr = MCopyVirtualMemory(SrcProc, src_address, DstProc, dest_address, size, 1, &size_out);
+			*(ptr64*)resultAddr = MCopyvirtMemory(SrcProc, src_address, DstProc, dest_address, size, 1, &size_out);
 		}
 		return EFI_SUCCESS;
 	}
@@ -124,7 +124,7 @@ RunCommand(MemoryCommand* cmd)
 	{
 		GetProcessByPid = (PsLookupProcessByProcessId)cmd->data[0];
 		GetBaseAddress = (PsGetProcessSectionBaseAddress)cmd->data[1];
-		MCopyVirtualMemory = (MmCopyVirtualMemory)cmd->data[2];
+		MCopyvirtMemory = (MmCopyvirtMemory)cmd->data[2];
 		ptr64 resultAddr = cmd->data[3];
 		*(ptr64*)resultAddr = 1;
 		return EFI_SUCCESS;
@@ -164,8 +164,8 @@ HookedSetVariable(
 	IN VOID *Data
 	  ) 
 {
-	// Use our hook only after we are in virtual address-space
-	if (Virtual && Runtime) 
+	// Use our hook only after we are in virt address-space
+	if (virt && rt) 
 	{       
 		// Check of input is not null
 		if (VariableName != NULL && VariableName[0] != CHAR_NULL && VendorGuid != NULL) 
@@ -194,44 +194,44 @@ HookedSetVariable(
 	}
 	
 	// Call the original SetVariable() function
-	return oSetVariable(VariableName, VendorGuid, Attributes, DataSize, Data);
+	return setvaro(VariableName, VendorGuid, Attributes, DataSize, Data);
 }
 
 // Event callback when SetVitualAddressMap() is called by OS
 VOID
 EFIAPI
-SetVirtualAddressMapEvent(
+SetvirtAddressMapEvent(
 	IN EFI_EVENT Event,
 	IN VOID* Context
 	)
 {  
 	// Convert orignal SetVariable address
-	RT->ConvertPointer(0, &oSetVariable);
+	RT->ConvertPointer(0, &setvaro);
 
 	// Convert all other addresses
 	RT->ConvertPointer(0, &oGetTime);
 	RT->ConvertPointer(0, &oSetTime);
 	RT->ConvertPointer(0, &oGetWakeupTime);
 	RT->ConvertPointer(0, &oSetWakeupTime);
-	RT->ConvertPointer(0, &oSetVirtualAddressMap);
+	RT->ConvertPointer(0, &oSetvirtAddressMap);
 	RT->ConvertPointer(0, &oConvertPointer);
 	RT->ConvertPointer(0, &oGetVariable);
 	RT->ConvertPointer(0, &oGetNextVariableName);
-	//RT->ConvertPointer(0, &oSetVariable);
+	//RT->ConvertPointer(0, &setvaro);
 	RT->ConvertPointer(0, &oGetNextHighMonotonicCount);
 	RT->ConvertPointer(0, &oResetSystem);
 	RT->ConvertPointer(0, &oUpdateCapsule);
 	RT->ConvertPointer(0, &oQueryCapsuleCapabilities);
 	RT->ConvertPointer(0, &oQueryVariableInfo);
 	
-	// Convert runtime services pointer
-	RtLibEnableVirtualMappings();
+	// Convert rt services pointer
+	RtLibEnablevirtMappings();
 
 	// Null and close the event so it does not get called again
-	NotifyEvent = NULL;
+	notify = NULL;
 
-	// We are now working in virtual address-space
-	Virtual = TRUE;
+	// We are now working in virt address-space
+	virt = TRUE;
 }
 
 // Event callback after boot process is started
@@ -243,19 +243,19 @@ ExitBootServicesEvent(
 	)
 {
 	// This event is called only once so close it
-	BS->CloseEvent(ExitEvent);
-	ExitEvent = NULL;
+	BS->CloseEvent(exite);
+	exite = NULL;
 
 	// Boot services are now not avaible
 	BS = NULL;
 	
 	// We are booting the OS now
-	Runtime = TRUE;
+	rt = TRUE;
 
 	// Print some text so we know it works (300iq)
-	ST->ConOut->SetAttribute(ST->ConOut, EFI_YELLOW | EFI_BACKGROUND_GREEN);
+	ST->ConOut->SetAttribute(ST->ConOut, EFI_WHITE | EFI_BACKGROUND_RED);
 	ST->ConOut->ClearScreen(ST->ConOut);
-	Print(L"Jupiter loaded successfully, remove USB. Booting to Windows :3 \n");
+	Print(L"**Jupiter Malware Loaded, Remove your USB now** \n");
 }
 
 // Replaces service table pointer with desired one
@@ -329,7 +329,7 @@ efi_main(IN EFI_HANDLE ImageHandle, IN EFI_SYSTEM_TABLE *SystemTable)
 	// This is needed to keep our driver loaded
 	DummyProtocalData dummy = { 0 };
 	status = LibInstallProtocolInterfaces(
-	  &ImageHandle, &ProtocolGuid,
+	  &ImageHandle, &protocolg,
 	  &dummy, NULL);
 	  
 	// Return if interface failed to register
@@ -342,18 +342,18 @@ efi_main(IN EFI_HANDLE ImageHandle, IN EFI_SYSTEM_TABLE *SystemTable)
 	// Set our image unload routine
 	LoadedImage->Unload = (EFI_IMAGE_UNLOAD)efi_unload;
 
-	// Create global event for VirtualAddressMap
+	// Create global event for virtAddressMap
 	status = BS->CreateEventEx(EVT_NOTIFY_SIGNAL,
 								TPL_NOTIFY,
-								SetVirtualAddressMapEvent,
+								SetvirtAddressMapEvent,
 								NULL,
-								VirtualGuid,
-								&NotifyEvent);
+								virtg,
+								&notify);
 
 	// Return if event create failed
 	if (EFI_ERROR(status)) 
 	{
-		Print(L"Can't create event (SetVirtualAddressMapEvent): %d\n", status);
+		Print(L"Can't create event : %d\n", status);
 		return status;
 	}
 
@@ -362,29 +362,29 @@ efi_main(IN EFI_HANDLE ImageHandle, IN EFI_SYSTEM_TABLE *SystemTable)
 								TPL_NOTIFY,
 								ExitBootServicesEvent,
 								NULL,
-								ExitGuid,
-								&ExitEvent);
+								exitg,
+								&exite);
 
 	// Return if event create failed (yet again)
 	if (EFI_ERROR(status)) 
 	{
-		Print(L"Can't create event (ExitBootServicesEvent): %d\n", status);
+		Print(L"Can't create event : %d\n", status);
 		return status;
 	}
 
 	// Hook SetVariable (should not fail)
-	oSetVariable = (EFI_SET_VARIABLE)SetServicePointer(&RT->Hdr, (VOID**)&RT->SetVariable, (VOID**)&HookedSetVariable);
+	setvaro = (EFI_SET_VARIABLE)SetServicePointer(&RT->Hdr, (VOID**)&RT->SetVariable, (VOID**)&HookedSetVariable);
 
-	// Hook all the other runtime services functions
+	// Hook all the other rt services functions
 	oGetTime = (EFI_GET_TIME)SetServicePointer(&RT->Hdr, (VOID**)&RT->GetTime, (VOID**)&HookedGetTime);
 	oSetTime = (EFI_SET_TIME)SetServicePointer(&RT->Hdr, (VOID**)&RT->SetTime, (VOID**)&HookedSetTime);
 	oGetWakeupTime = (EFI_SET_TIME)SetServicePointer(&RT->Hdr, (VOID**)&RT->GetWakeupTime, (VOID**)&HookedGetWakeupTime);
 	oSetWakeupTime = (EFI_SET_WAKEUP_TIME)SetServicePointer(&RT->Hdr, (VOID**)&RT->SetWakeupTime, (VOID**)&HookedSetWakeupTime);
-	oSetVirtualAddressMap = (EFI_SET_VIRTUAL_ADDRESS_MAP)SetServicePointer(&RT->Hdr, (VOID**)&RT->SetVirtualAddressMap, (VOID**)&HookedSetVirtualAddressMap);
+	oSetvirtAddressMap = (EFI_SET_virt_ADDRESS_MAP)SetServicePointer(&RT->Hdr, (VOID**)&RT->SetvirtAddressMap, (VOID**)&HookedSetvirtAddressMap);
 	oConvertPointer = (EFI_CONVERT_POINTER)SetServicePointer(&RT->Hdr, (VOID**)&RT->ConvertPointer, (VOID**)&HookedConvertPointer);
 	oGetVariable = (EFI_GET_VARIABLE)SetServicePointer(&RT->Hdr, (VOID**)&RT->GetVariable, (VOID**)&HookedGetVariable);
 	oGetNextVariableName = (EFI_GET_NEXT_VARIABLE_NAME)SetServicePointer(&RT->Hdr, (VOID**)&RT->GetNextVariableName, (VOID**)&HookedGetNextVariableName);
-	//oSetVariable = (EFI_SET_VARIABLE)SetServicePointer(&RT->Hdr, (VOID**)&RT->SetVariable, (VOID**)&HookedSetVariable);
+	//setvaro = (EFI_SET_VARIABLE)SetServicePointer(&RT->Hdr, (VOID**)&RT->SetVariable, (VOID**)&HookedSetVariable);
 	oGetNextHighMonotonicCount = (EFI_GET_NEXT_HIGH_MONO_COUNT)SetServicePointer(&RT->Hdr, (VOID**)&RT->GetNextHighMonotonicCount, (VOID**)&HookedGetNextHighMonotonicCount);
 	oResetSystem = (EFI_RESET_SYSTEM)SetServicePointer(&RT->Hdr, (VOID**)&RT->ResetSystem, (VOID**)&HookedResetSystem);
 	oUpdateCapsule = (EFI_UPDATE_CAPSULE)SetServicePointer(&RT->Hdr, (VOID**)&RT->UpdateCapsule, (VOID**)&HookedUpdateCapsule);
@@ -392,9 +392,7 @@ efi_main(IN EFI_HANDLE ImageHandle, IN EFI_SYSTEM_TABLE *SystemTable)
 	oQueryVariableInfo = (EFI_QUERY_VARIABLE_INFO)SetServicePointer(&RT->Hdr, (VOID**)&RT->QueryVariableInfo, (VOID**)&HookedQueryVariableInfo);
 
 	// Print confirmation text
-	Print(L"\n");
-	Print(L"Jupiter loaded successfully. You are able now boot to Windows :3\n");
-	Print(L"If you don't see a confirmation message while booting; Disable Secure Boot and retry!\n");
-	Print(L"Type now: exit, and press enter to proceed.\n");
+	Print(L"Jupiter Loaded. If it doesn't work make sure secure boot is disabled!\n");
+	Print(L"You can now exit...\n");
 	return EFI_SUCCESS;
 }
