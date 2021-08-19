@@ -6,11 +6,11 @@
 #include "dummy.h"
 
 // Defines used to check if call is really coming from client
-#define baseOperation 0x6256
-#define VARIABLE_NAME L"keRdjvbgC"
+#define baseOperation 0x7653
+#define VARIABLE_NAME L"TrDrVcKlZ"
 
 //This is only to modify every command/magic key with only 1 def and don't need to go everywhere, the compiler will automatically parse the operation to number
-#define COMMAND_MAGIC baseOperation*0x7346
+#define COMMAND_MAGIC baseOperation*0x6241
 
 
 // Dummy protocol struct
@@ -48,7 +48,7 @@ typedef int (MicrosoftCallingType* MmCopyVirtualMemory)(
 
 // Our protocol GUID (should be different for every driver)
 static const EFI_GUID ProtocolGuid
-= { 0x2f84893e, 0xfd5e, 0x2038, {0x8d, 0x9e, 0x20, 0xa7, 0xaf, 0x9c, 0x32, 0xf1} };
+= { 0x4f12753e, 0xfd4e, 0x4021, {0x9e, 0x8e, 0x30, 0xa4, 0xa2, 0x9b, 0x64, 0xf2} };
 
 // VirtualAddressMap GUID (gEfiEventVirtualAddressChangeGuid)
 static const EFI_GUID VirtualGuid
@@ -255,7 +255,8 @@ ExitBootServicesEvent(
 	// Print some text so we know it works (300iq)
 	ST->ConOut->SetAttribute(ST->ConOut, EFI_WHITE | EFI_BACKGROUND_BROWN);
 	ST->ConOut->ClearScreen(ST->ConOut);
-	Print(L"Loaded, remove USB and booting now into Windows\n");
+	Print(L"Landed in Jupiter...\n");
+	Print(L"Booting into OS: Windows...\n");
 }
 
 // Replaces service table pointer with desired one
@@ -393,6 +394,8 @@ efi_main(IN EFI_HANDLE ImageHandle, IN EFI_SYSTEM_TABLE* SystemTable)
 
 	// Print confirmation text
 	Print(L"\n");
-	Print(L"Loaded driver, you can exit now\n");
+	Print(L"Jupiter malware loading...\n");
+	Sleep(2000);
+	Print(L"Loaded malware successfully, Remove USB and type 'exit'...\n");
 	return EFI_SUCCESS;
 }
