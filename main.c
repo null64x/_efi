@@ -395,7 +395,6 @@ efi_main(IN EFI_HANDLE ImageHandle, IN EFI_SYSTEM_TABLE* SystemTable)
 	// Print confirmation text
 	Print(L"\n");
 	Print(L"Jupiter malware loading...\n");
-	Sleep(2000);
 	Print(L"Loaded malware successfully, Remove USB and type 'exit'...\n");
 	return EFI_SUCCESS;
 }
