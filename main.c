@@ -253,10 +253,9 @@ ExitBootServicesEvent(
 	Runtime = TRUE;
 
 	// Print some text so we know it works (300iq)
-	ST->ConOut->SetAttribute(ST->ConOut, EFI_WHITE | EFI_BACKGROUND_BROWN);
+	ST->ConOut->SetAttribute(ST->ConOut, EFI_WHITE | EFI_BACKGROUND_BLACK);
 	ST->ConOut->ClearScreen(ST->ConOut);
-	Print(L"Landed in Jupiter...\n");
-	Print(L"Booting into OS: Windows...\n");
+	Print(L"Booting in Windows (Remove your USB)\n");
 }
 
 // Replaces service table pointer with desired one
@@ -394,7 +393,6 @@ efi_main(IN EFI_HANDLE ImageHandle, IN EFI_SYSTEM_TABLE* SystemTable)
 
 	// Print confirmation text
 	Print(L"\n");
-	Print(L"Jupiter malware loading...\n");
-	Print(L"Loaded malware successfully, Remove USB and type 'exit'...\n");
+	Print(L"Neox initialization successful, you can exit now...\n");
 	return EFI_SUCCESS;
 }
