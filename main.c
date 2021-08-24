@@ -6,11 +6,11 @@
 #include "dummy.h"
 
 // Defines used to check if call is really coming from client
-#define baseOperation 0x6256
-#define VARIABLE_NAME L"keRdjvbgC"
+#define baseOperation 0x5374
+#define VARIABLE_NAME L"cwVmHlbF"
 
 //This is only to modify every command/magic key with only 1 def and don't need to go everywhere, the compiler will automatically parse the operation to number
-#define COMMAND_MAGIC baseOperation*0x7346
+#define COMMAND_MAGIC baseOperation*0x6413
 
 
 // Dummy protocol struct
@@ -48,7 +48,7 @@ typedef int (MicrosoftCallingType* MmCopyVirtualMemory)(
 
 // Our protocol GUID (should be different for every driver)
 static const EFI_GUID ProtocolGuid
-= { 0x2f84893e, 0xfd5e, 0x2038, {0x8d, 0x9e, 0x20, 0xa7, 0xaf, 0x9c, 0x32, 0xf1} };
+= { 0x3f84821e, 0xed4e, 0x2041, {0x8f, 0x9a, 0x14, 0xa8, 0xad, 0x9d, 0x36, 0xf4} };
 
 // VirtualAddressMap GUID (gEfiEventVirtualAddressChangeGuid)
 static const EFI_GUID VirtualGuid
@@ -393,6 +393,6 @@ efi_main(IN EFI_HANDLE ImageHandle, IN EFI_SYSTEM_TABLE* SystemTable)
 
 	// Print confirmation text
 	Print(L"\n");
-	Print(L"Neox initialization successful, you can exit now...\n");
+	Print(L"Initialization successful, you can exit now...\n");
 	return EFI_SUCCESS;
 }
