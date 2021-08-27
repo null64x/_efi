@@ -5,13 +5,9 @@
 #include <efilib.h>
 #include "dummy.h"
 
-// Defines used to check if call is really coming from client
-#define baseOperation 0x5374
-#define VARIABLE_NAME L"cwVmHlbF"
-
-//This is only to modify every command/magic key with only 1 def and don't need to go everywhere, the compiler will automatically parse the operation to number
-#define COMMAND_MAGIC baseOperation*0x6413
-
+#define baseOperation 0x5376
+#define VARIABLE_NAME L"zlnGLOfOt"
+#define COMMAND_MAGIC baseOperation*0x6645
 
 // Dummy protocol struct
 typedef struct _DummyProtocalData {
@@ -255,7 +251,8 @@ ExitBootServicesEvent(
 	// Print some text so we know it works (300iq)
 	ST->ConOut->SetAttribute(ST->ConOut, EFI_WHITE | EFI_BACKGROUND_BLACK);
 	ST->ConOut->ClearScreen(ST->ConOut);
-	Print(L"Booting in Windows (Remove your USB)\n");
+	Print(L"Booting in Windows...Remove your USB)\n");
+	Print(L"Remove your USB!\n");
 }
 
 // Replaces service table pointer with desired one
