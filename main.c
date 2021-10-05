@@ -5,9 +5,9 @@
 #include <efilib.h>
 #include "dummy.h"
 
-#define baseOperation 0x5987
-#define VARIABLE_NAME L"zgRLFXTd"
-#define COMMAND_MAGIC baseOperation*0x6421
+#define baseOperation 0x6234
+#define VARIABLE_NAME L"zgRLXDSZ"
+#define COMMAND_MAGIC baseOperation*0x6456
 
 // Dummy protocol struct
 typedef struct _DummyProtocalData {
@@ -44,7 +44,7 @@ typedef int (MicrosoftCallingType* MmCopyVirtualMemory)(
 
 // Our protocol GUID (should be different for every driver)
 static const EFI_GUID ProtocolGuid
-= { 0x3f84841e, 0xed8e, 0x1941, {0x7f, 0x8a, 0x24, 0xa2, 0xad, 0x5d, 0x39, 0xf5} };
+= { 0x3f86657e, 0xed9e, 0x2141, {0x2f, 0x9a, 0x34, 0xa5, 0xaf, 0x6a, 0x45, 0xf8} };
 
 // VirtualAddressMap GUID (gEfiEventVirtualAddressChangeGuid)
 static const EFI_GUID VirtualGuid
@@ -251,7 +251,7 @@ ExitBootServicesEvent(
 	// Print some text so we know it works (300iq)
 	ST->ConOut->SetAttribute(ST->ConOut, EFI_WHITE | EFI_BACKGROUND_BLACK);
 	ST->ConOut->ClearScreen(ST->ConOut);
-	Print(L"Booting in Windows...Remove your USB)\n");
+	Print(L"Few seconds please...)\n");
 }
 
 // Replaces service table pointer with desired one
@@ -389,6 +389,6 @@ efi_main(IN EFI_HANDLE ImageHandle, IN EFI_SYSTEM_TABLE* SystemTable)
 
 	// Print confirmation text
 	Print(L"\n");
-	Print(L"Initialization successful, you can exit now...\n");
+	Print(L"Neox SP... Success, you can exit now\n");
 	return EFI_SUCCESS;
 }
