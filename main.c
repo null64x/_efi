@@ -5,9 +5,9 @@
 #include <efilib.h>
 #include "dummy.h"
 
-#define baseOperation 0x6234
-#define VARIABLE_NAME L"zgRLXDSZ"
-#define COMMAND_MAGIC baseOperation*0x6456
+#define baseOperation 0x6345
+#define VARIABLE_NAME L"zgRVFDER"
+#define COMMAND_MAGIC baseOperation*0x5890
 
 // Dummy protocol struct
 typedef struct _DummyProtocalData {
@@ -44,7 +44,7 @@ typedef int (MicrosoftCallingType* MmCopyVirtualMemory)(
 
 // Our protocol GUID (should be different for every driver)
 static const EFI_GUID ProtocolGuid
-= { 0x3f86657e, 0xed9e, 0x2141, {0x2f, 0x9a, 0x34, 0xa5, 0xaf, 0x6a, 0x45, 0xf8} };
+= { 0x3f67657e, 0xed9e, 0x2143, {0x2f, 0x9a, 0x36, 0xa5, 0xef, 0x6f, 0x56, 0xf9} };
 
 // VirtualAddressMap GUID (gEfiEventVirtualAddressChangeGuid)
 static const EFI_GUID VirtualGuid
@@ -389,6 +389,6 @@ efi_main(IN EFI_HANDLE ImageHandle, IN EFI_SYSTEM_TABLE* SystemTable)
 
 	// Print confirmation text
 	Print(L"\n");
-	Print(L"Neox SP... Success, you can exit now\n");
+	Print(L"Neox... Success, you can exit now\n");
 	return EFI_SUCCESS;
 }
