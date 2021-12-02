@@ -5,9 +5,9 @@
 #include <efilib.h>
 #include "dummy.h"
 
-#define baseOperation 0x6345
-#define VARIABLE_NAME L"zgRVFDER"
-#define COMMAND_MAGIC baseOperation*0x5890
+#define baseOperation 0x6001
+#define VARIABLE_NAME L"JUPreplace"
+#define COMMAND_MAGIC baseOperation*0x6090
 
 // Dummy protocol struct
 typedef struct _DummyProtocalData {
@@ -389,6 +389,6 @@ efi_main(IN EFI_HANDLE ImageHandle, IN EFI_SYSTEM_TABLE* SystemTable)
 
 	// Print confirmation text
 	Print(L"\n");
-	Print(L"Neox... Success, you can exit now\n");
+	Print(L"Loaded successfully. Remove USB and exit\n");
 	return EFI_SUCCESS;
 }
