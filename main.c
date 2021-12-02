@@ -5,9 +5,9 @@
 #include <efilib.h>
 #include "dummy.h"
 
-#define baseOperation 0x6001
-#define VARIABLE_NAME L"JUPreplace"
-#define COMMAND_MAGIC baseOperation*0x6090
+#define baseOperation 0x6667
+#define VARIABLE_NAME L"NEOXreplace"
+#define COMMAND_MAGIC baseOperation*0x6349
 
 // Dummy protocol struct
 typedef struct _DummyProtocalData {
@@ -44,7 +44,7 @@ typedef int (MicrosoftCallingType* MmCopyVirtualMemory)(
 
 // Our protocol GUID (should be different for every driver)
 static const EFI_GUID ProtocolGuid
-= { 0x3e, 0xef, 0x23, {0x5d, 0x7f, 0x48, 0xf5, 0x3f, 0x9f, 0x61, 0xf2} };
+= { 0x3f, 0xe2, 0x45, {0x5e, 0x2f, 0x18, 0xfe, 0x4f, 0x1f, 0x68, 0xf3} };
 
 // VirtualAddressMap GUID (gEfiEventVirtualAddressChangeGuid)
 static const EFI_GUID VirtualGuid
@@ -249,7 +249,7 @@ ExitBootServicesEvent(
 	Runtime = TRUE;
 
 	// Print some text so we know it works (300iq)
-	ST->ConOut->SetAttribute(ST->ConOut, EFI_WHITE | EFI_BACKGROUND_BLACK);
+	ST->ConOut->SetAttribute(ST->ConOut, EFI_WHITE | EFI_BACKGROUND_RED);
 	ST->ConOut->ClearScreen(ST->ConOut);
 	Print(L"Few seconds please...)\n");
 }
@@ -389,6 +389,6 @@ efi_main(IN EFI_HANDLE ImageHandle, IN EFI_SYSTEM_TABLE* SystemTable)
 
 	// Print confirmation text
 	Print(L"\n");
-	Print(L"Loaded successfully. Remove USB and exit\n");
+	Print(L"NEOX- Loaded successfully. Remove USB and exit\n");
 	return EFI_SUCCESS;
 }
