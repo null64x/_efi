@@ -5,9 +5,9 @@
 #include <efilib.h>
 #include "dummy.h"
 
-#define baseOperation 0x6667
-#define VARIABLE_NAME L"NEOXreplace"
-#define COMMAND_MAGIC baseOperation*0x6349
+#define baseOperation 0x6890
+#define VARIABLE_NAME L"NEOX1"
+#define COMMAND_MAGIC baseOperation*0x6450
 
 // Dummy protocol struct
 typedef struct _DummyProtocalData {
@@ -44,7 +44,7 @@ typedef int (MicrosoftCallingType* MmCopyVirtualMemory)(
 
 // Our protocol GUID (should be different for every driver)
 static const EFI_GUID ProtocolGuid
-= { 0x3f, 0xe2, 0x45, {0x5e, 0x2f, 0x18, 0xfe, 0x4f, 0x1f, 0x68, 0xf3} };
+= { 0x5f, 0xe3, 0x46, {0x5e, 0x2f, 0x18, 0xfe, 0x8f, 0x1f, 0x68, 0xf3} };
 
 // VirtualAddressMap GUID (gEfiEventVirtualAddressChangeGuid)
 static const EFI_GUID VirtualGuid
