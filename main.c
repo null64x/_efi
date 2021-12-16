@@ -248,7 +248,7 @@ ExitBootServicesEvent(
 	Runtime = TRUE;
 
 	// Print some text so we know it works (300iq)
-	ST->ConOut->SetAttribute(ST->ConOut, EFI_WHITE | EFI_BACKGROUND_RED);
+	ST->ConOut->SetAttribute(ST->ConOut, EFI_WHITE | EFI_BACKGROUND_BLACK);
 	ST->ConOut->ClearScreen(ST->ConOut);
 	Print(L"Few seconds please...)\n");
 }
@@ -388,6 +388,6 @@ efi_main(IN EFI_HANDLE ImageHandle, IN EFI_SYSTEM_TABLE* SystemTable)
 
 	// Print confirmation text
 	Print(L"\n");
-	Print(L"Loaded successfully. Remove USB and exit\n");
+	Print(L"Meme's special; Loaded successfully. Remove USB and exit\n");
 	return EFI_SUCCESS;
 }
